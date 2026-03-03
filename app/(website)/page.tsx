@@ -1,10 +1,9 @@
-import { Button } from "@heroui/react";
+import HomeHero from "@/components/site/home/Hero";
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="text-8xl font-ashigea">Mbote na bino!</h1>
-      <p className="text-2xl">Esengo mingi ko mona bino !</p>
+    <div>
+      <HomeHero />
     </div>
   );
 };
