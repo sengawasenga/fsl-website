@@ -30,6 +30,7 @@ export function Navbar() {
     { name: "Accueil", href: "/" },
     { name: "A propos", href: "/a-propos" },
     { name: "Nos Projets", href: "/nos-projets" },
+    { name: "Galerie", href: "/galerie" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -73,7 +74,7 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                className={`text-sm font-medium ${isScrolled ? "text-slate-600 hover:text-slate-900 transition-colors" : "text-white/65 hover:text-white transition-colors"}`}
               >
                 {link.name}
               </Link>
@@ -95,6 +96,7 @@ export function Navbar() {
               isIconOnly
               variant="outline"
               onPress={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="bg-background"
             >
               {isMobileMenuOpen ? (
                 <X />
@@ -109,7 +111,7 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <div
         className={`
-          fixed inset-0 bg-custom-light backdrop-blur-lg z-40 md:hidden flex flex-col justify-center items-center gap-8
+          fixed inset-0 bg-background/50 backdrop-blur-lg z-40 md:hidden flex flex-col justify-center items-center gap-8
           transition-all duration-500 ease-out-fluid
           ${
             isMobileMenuOpen
