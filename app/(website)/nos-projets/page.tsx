@@ -1,12 +1,12 @@
-import { Button } from "@heroui/react";
+import React from "react";
 
-const HomePage = () => {
+const ProjectsPage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="text-7xl">Mbote na bino!</h1>
+      <h1 className="text-8xl font-ashigea">Nos Projets</h1>
       <p className="text-2xl">Esengo mingi ko mona bino !</p>
     </div>
   );
 };
 
-export default HomePage;
+export default ProjectsPage;

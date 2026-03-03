@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import LoadingProvider from "@/components/ui/LoadingProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.className} bg-background text-foreground font-light overflow-x-hidden antialiased ${ashigea.variable}`}
       >
-        {children}
+        <LoadingProvider>{children}</LoadingProvider>
       </body>
     </html>
   );
