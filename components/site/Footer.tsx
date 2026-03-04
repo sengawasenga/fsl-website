@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 
 const Footer = () => {
   return (
-    <footer className="bg-foreground text-background/80 py-20 px-6">
+    <footer className="bg-primary text-background/80 py-20 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16">
         <div className="md:col-span-2 space-y-6">
           <h3 className="text-3xl font-ashigea text-background">
