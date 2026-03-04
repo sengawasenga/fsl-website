@@ -1,12 +1,20 @@
-import React from "react";
+import { Metadata } from "next";
+import GalleryHero from "@/components/site/gallery/GalleryHero";
+import GalleryGrid from "@/components/site/gallery/GalleryGrid";
+import CallToAction from "@/components/site/home/CallToAction";
 
-const GalleryPage = () => {
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="text-8xl font-ashigea">Galerie</h1>
-      <p className="text-2xl">Esengo mingi ko mona bino !</p>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Galerie | Fondation Sylvain Lumbala",
+  description:
+    "Découvrez nos projets et actions sur le terrain à travers notre galerie photo.",
 };
 
-export default GalleryPage;
+export default function GalleryPage() {
+  return (
+    <main>
+      <GalleryHero />
+      <GalleryGrid />
+      <CallToAction />
+    </main>
+  );
+}

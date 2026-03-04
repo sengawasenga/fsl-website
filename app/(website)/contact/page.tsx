@@ -1,12 +1,20 @@
-import React from "react";
+import { Metadata } from "next";
+import ContactHero from "@/components/site/contact/ContactHero";
+import ContactContent from "@/components/site/contact/ContactContent";
+import ContactMap from "@/components/site/contact/ContactMap";
 
-const ContactPage = () => {
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="text-8xl font-ashigea">Contact</h1>
-      <p className="text-2xl">Esengo mingi ko mona bino !</p>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Contact | Fondation Sylvain Lumbala",
+  description:
+    "Contactez-nous pour toute demande d'information, partenariat ou projet commun.",
 };
 
-export default ContactPage;
+export default function ContactPage() {
+  return (
+    <main>
+      <ContactHero />
+      <ContactContent />
+      <ContactMap />
+    </main>
+  );
+}

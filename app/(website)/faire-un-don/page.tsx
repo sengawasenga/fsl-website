@@ -1,12 +1,20 @@
-import React from "react";
+import { Metadata } from "next";
+import DonationHero from "@/components/site/donation/DonationHero";
+import DonationImpact from "@/components/site/donation/DonationImpact";
+import DonationForm from "@/components/site/donation/DonationForm";
 
-const DonatePage = () => {
-  return (
-    <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="text-8xl font-ashigea">Faire un don</h1>
-      <p className="text-2xl">Esengo mingi ko mona bino !</p>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Faire un don | Fondation Sylvain Lumbala",
+  description:
+    "Soutenez nos actions. Votre générosité permet de transformer des vies sur le terrain.",
 };
 
-export default DonatePage;
+export default function DonationPage() {
+  return (
+    <main>
+      <DonationHero />
+      <DonationImpact />
+      <DonationForm />
+    </main>
+  );
+}
