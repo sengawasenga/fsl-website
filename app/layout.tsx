@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import LoadingProvider from "@/components/ui/LoadingProvider";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.className} bg-background text-foreground font-light overflow-x-hidden antialiased ${ashigea.variable}`}
       >
-        <LoadingProvider>{children}</LoadingProvider>
+        <LoadingProvider>
+          <SmoothScroll />
+          {children}
+        </LoadingProvider>
       </body>
     </html>
   );
