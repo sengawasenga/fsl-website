@@ -38,7 +38,7 @@ const HomeHero = () => {
       <div className="relative z-10 max-w-4xl px-6 text-background text-center flex flex-col gap-10">
         <div>
           <ShinyText
-            text={"Fondation Sylvain Lukala"}
+            text={"Fondation Sylvain Lumbala"}
             speed={1.5}
             delay={1.5}
             color="#009FE3"

@@ -208,7 +208,14 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
         )}
         {...rest}
         layout
-        transition={transition}
+        transition={{
+          layout: {
+            type: "spring",
+            damping: 28,
+            stiffness: 200,
+            mass: 0.8,
+          },
+        }}
       >
         <span className="sr-only">{texts[currentTextIndex]}</span>
         <AnimatePresence
