@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import logoFSL from "@/public/img/fsl-logo.png";
@@ -9,7 +10,15 @@ import { X } from "lucide-react";
 import { LanguageSelector } from "../ui/LanguageSelector";
 import { Icon } from "@iconify/react";
 
-export function Navbar() {
+interface Props {
+  starterWhite?: boolean;
+}
+
+export function Navbar({ starterWhite: manualStarterWhite }: Props) {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const starterWhite = manualStarterWhite ?? isHome;
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -74,7 +83,7 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium ${isScrolled ? "text-slate-600 hover:text-slate-900 transition-colors" : "text-white/65 hover:text-white transition-colors"}`}
+                className={`text-sm font-medium ${isScrolled ? "text-slate-600 hover:text-slate-900 transition-colors" : starterWhite ? "text-white/65 hover:text-white transition-colors" : "text-slate-600 hover:text-slate-900 transition-colors"}`}
               >
                 {link.name}
               </Link>
