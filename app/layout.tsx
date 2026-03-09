@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import LoadingProvider from "@/components/ui/LoadingProvider";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
       >
         <LoadingProvider>
           <SmoothScroll />
+          <Analytics />
           {children}
         </LoadingProvider>
       </body>
