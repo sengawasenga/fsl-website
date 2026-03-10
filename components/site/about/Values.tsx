@@ -5,7 +5,7 @@ import SplitText from "@/components/ui/SplitText";
 
 const values = [
   {
-    icon: "solar:hand-hearts-bold-duotone",
+    icon: "solar:hand-heart-bold-duotone",
     title: "Solidarité",
     description:
       "Une entraide inconditionnelle, fondant toute démarche de soutien sur une empathie sincère et active.",

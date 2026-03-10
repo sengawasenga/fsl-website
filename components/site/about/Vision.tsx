@@ -29,7 +29,7 @@ const visionPillars = [
       "Protéger notre écosystème en accompagnant des pratiques respectueuses de l'environnement.",
   },
   {
-    icon: "solar:handshake-bold-duotone",
+    icon: "solar:share-circle-bold-duotone",
     title: "Paix & cohésion",
     description:
       "Bâtir des ponts de solidarité durable pour prévenir les conflits et consolider le vivre-ensemble.",

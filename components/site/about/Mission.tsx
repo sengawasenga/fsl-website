@@ -5,7 +5,7 @@ import SplitText from "@/components/ui/SplitText";
 
 const missionBlocks = [
   {
-    icon: "solar:wheat-bold-duotone",
+    icon: "solar:bonfire-bold-duotone",
     title: "Sécurité alimentaire",
     description:
       "Soutenir la production locale et équiper les agriculteurs pour garantir une alimentation saine aux communautés ciblées.",

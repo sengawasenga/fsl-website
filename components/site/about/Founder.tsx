@@ -1,6 +1,8 @@
 "use client";
 
 import SplitText from "@/components/ui/SplitText";
+import Image from "next/image";
+import fslLeader from "@/public/img/fsl-leader.jpeg";
 
 const Founder = () => {
   return (
@@ -8,12 +10,12 @@ const Founder = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
           <div className="md:col-span-5 relative">
-            <div className="bg-background rounded-[2rem] w-full aspect-[4/5] shadow-sm flex items-center justify-center border border-foreground/10 relative z-10">
-              <span className="text-foreground/30 font-medium tracking-widest uppercase text-center px-4">
-                Portrait
-                <br />
-                Sylvain Lumbala Mupenda
-              </span>
+            <div className="bg-background rounded-[2rem] overflow-hidden w-full aspect-4/5 shadow-sm flex items-center justify-center border border-foreground/10 relative z-10">
+              <Image
+                src={fslLeader}
+                alt="Le leader de la fondation sylvain lumbala"
+                className="object-cover w-full h-full object-center"
+              />
             </div>
             {/* Subtle accent blob */}
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary rounded-full opacity-10 blur-2xl z-0"></div>
@@ -32,6 +34,7 @@ const Founder = () => {
               from={{ opacity: 0, y: 20 }}
               to={{ opacity: 1, y: 0 }}
               threshold={0.1}
+              textAlign="left"
               rootMargin="-50px"
               tag="h2"
             />
@@ -60,7 +63,7 @@ const Founder = () => {
               <span className="absolute top-4 left-4 text-6xl text-primary/10 font-serif leading-none">
                 "
               </span>
-              <p className="text-lg font-ashigea text-foreground/90 italic leading-relaxed relative z-10 pt-2">
+              <p className="text-base text-foreground/90 italic leading-relaxed relative z-10 pt-2">
                 La véritable mesure du progrès réside dans notre capacité à
                 préserver la dignité de chacun et à édifier ensemble un socle de
                 résilience durable pour nos communautés.

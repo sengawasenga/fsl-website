@@ -1,15 +1,19 @@
 "use client";
 
 import SplitText from "@/components/ui/SplitText";
+import Image from "next/image";
+import img1 from "@/public/img/members/img-12.jpg";
 
 const Foundation = () => {
   return (
     <section className="py-24 px-6 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
         <div className="order-2 md:order-1 bg-foreground/5 rounded-[2rem] w-full h-[500px] shadow-sm relative overflow-hidden flex items-center justify-center border border-foreground/10">
-          <span className="text-foreground/30 font-medium tracking-widest uppercase">
-            Espace Image
-          </span>
+          <Image
+            src={img1}
+            alt="Le fondement de la fondation sylvain lumbala"
+            className="object-cover w-full h-full object-center"
+          />
         </div>
         <div className="order-1 md:order-2">
           <SplitText
