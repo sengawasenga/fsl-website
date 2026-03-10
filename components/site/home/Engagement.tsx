@@ -5,7 +5,7 @@ import SplitText from "@/components/ui/SplitText";
 
 const pillars = [
   {
-    icon: "solar:hands-heart-bold-duotone",
+    icon: "solar:hand-heart-bold-duotone",
     title: "Dignité & conditions de vie",
     description:
       "Améliorer les conditions d'existence par la protection des droits fondamentaux et l'accès aux services de base.",

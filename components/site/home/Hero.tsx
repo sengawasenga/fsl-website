@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import heroBg from "@/public/img/hero-bg.jpg";
-import { Button } from "@heroui/react";
 import CircularText from "@/components/ui/CircularText";
 import ShinyText from "@/components/ui/ShinyText";
 import SplitText from "@/components/ui/SplitText";
 import RotatingText from "@/components/ui/RotatingText";
+import Link from "next/link";
 
 const HomeHero = () => {
   return (
@@ -87,12 +87,18 @@ const HomeHero = () => {
           tag="p"
         />
         <div className="flex items-center flex-wrap gap-4 justify-center">
-          <Button className={"bg-primary h-12"} size="lg">
+          <Link
+            href="/nos-projets"
+            className="bg-primary cursor-pointer rounded-full px-6 py-3 font-semibold text-lg text-white transition-all duration-250 hover:opacity-90"
+          >
             Voir nos actions
-          </Button>
-          <Button className={"bg-secondary text-foreground h-12"} size="lg">
+          </Link>
+          <Link
+            href="/faire-un-don"
+            className="bg-secondary cursor-pointer rounded-full px-6 py-3 font-semibold text-lg text-foreground transition-all duration-250 hover:opacity-90"
+          >
             Faire un don
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -93,8 +93,11 @@ export function Navbar({ starterWhite: manualStarterWhite }: Props) {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <LanguageSelector />
-            <Link href="/faire-un-don">
-              <Button className={"bg-primary"}>Faire un don</Button>
+            <Link
+              href="/faire-un-don"
+              className="bg-primary cursor-pointer rounded-full px-4 py-[6px] text-white transition-all duration-250 hover:opacity-90"
+            >
+              Faire un don
             </Link>
           </div>
 

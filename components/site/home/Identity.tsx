@@ -1,6 +1,8 @@
 "use client";
 
 import SplitText from "@/components/ui/SplitText";
+import img1 from "@/public/img/hero-bg.jpg";
+import Image from "next/image";
 
 const Identity = () => {
   return (
@@ -37,9 +39,11 @@ const Identity = () => {
           </div>
         </div>
         <div className="bg-foreground/5 rounded-[2rem] w-full h-[450px] shadow-inner relative overflow-hidden flex items-center justify-center border border-foreground/10">
-          <span className="text-foreground/30 font-medium tracking-widest uppercase">
-            Espace Image
-          </span>
+          <Image
+            src={img1}
+            className="w-full h-full object-cover object-center"
+            alt="Identité de la Fondation Sylvain Lumbala"
+          />
         </div>
       </div>
     </section>

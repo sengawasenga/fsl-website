@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@heroui/react";
 import SplitText from "@/components/ui/SplitText";
+import Link from "next/link";
 
 const CallToAction = () => {
   return (
     <section className="py-24 px-6 bg-foreground/5 relative overflow-hidden">
-      <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
+      <div className="max-w-4xl mx-auto text-center space-y-5 relative z-10">
         <SplitText
           text="L'engagement partagé"
           className="text-4xl md:text-6xl font-ashigea text-foreground block"
@@ -26,19 +26,12 @@ const CallToAction = () => {
           participez activement à cette transformation durable.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-          <Button
-            size="lg"
-            className="bg-primary text-background px-10 h-14 text-lg w-full sm:w-auto font-medium rounded-full shadow-lg shadow-primary/30"
+          <Link
+            href="/faire-un-don"
+            className="bg-primary cursor-pointer rounded-full px-6 py-3 font-semibold text-lg text-white transition-all duration-250 hover:opacity-90"
           >
             Faire un don
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-foreground/20 text-foreground px-10 h-14 text-lg w-full sm:w-auto font-medium rounded-full hover:bg-foreground/5 hover:border-foreground/30"
-          >
-            Devenir partenaire
-          </Button>
+          </Link>
         </div>
       </div>
     </section>
