@@ -8,6 +8,7 @@ interface ProjectDetailHeroProps {
   category: string;
   date: string;
   location: string;
+  image: string;
 }
 
 const ProjectDetailHero = ({
@@ -15,6 +16,7 @@ const ProjectDetailHero = ({
   category,
   date,
   location,
+  image,
 }: ProjectDetailHeroProps) => {
   return (
     <section className="pt-40 pb-16 px-6 max-w-4xl mx-auto">

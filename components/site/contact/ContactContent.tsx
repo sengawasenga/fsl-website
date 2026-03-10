@@ -21,7 +21,7 @@ const ContactContent = () => {
 
           <div className="space-y-8">
             <div className="flex items-start gap-4 group">
-              <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary group-hover:text-background transition-colors text-primary flex-shrink-0">
+              <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary group-hover:text-background transition-colors text-primary shrink-0">
                 <Icon
                   icon="solar:map-point-bold-duotone"
                   className="text-2xl"
@@ -42,7 +42,7 @@ const ContactContent = () => {
             </div>
 
             <div className="flex items-start gap-4 group">
-              <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary group-hover:text-background transition-colors text-primary flex-shrink-0">
+              <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary group-hover:text-background transition-colors text-primary shrink-0">
                 <Icon
                   icon="solar:phone-calling-bold-duotone"
                   className="text-2xl"
@@ -52,17 +52,14 @@ const ContactContent = () => {
                 <h3 className="text-sm uppercase tracking-wider font-semibold text-foreground/50 mb-1">
                   Téléphone
                 </h3>
-                <p className="text-foreground/90 font-medium">
-                  +243 000 000 000
-                </p>
-                <p className="text-foreground/90 font-medium">
-                  +243 000 000 001
-                </p>
+                <p className="text-foreground/90 font-medium">+243812801838</p>
+                <p className="text-foreground/90 font-medium">+243811702559</p>
+                <p className="text-foreground/90 font-medium">+243852552920</p>
               </div>
             </div>
 
             <div className="flex items-start gap-4 group">
-              <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary group-hover:text-background transition-colors text-primary flex-shrink-0">
+              <div className="bg-primary/10 p-4 rounded-2xl group-hover:bg-primary group-hover:text-background transition-colors text-primary shrink-0">
                 <Icon icon="solar:letter-bold-duotone" className="text-2xl" />
               </div>
               <div>
@@ -70,10 +67,7 @@ const ContactContent = () => {
                   Email
                 </h3>
                 <p className="text-foreground/90 font-medium">
-                  contact@fondation-sl.org
-                </p>
-                <p className="text-foreground/90 font-medium">
-                  partenariat@fondation-sl.org
+                  contact@fondationfsl.org
                 </p>
               </div>
             </div>
@@ -83,33 +77,24 @@ const ContactContent = () => {
             <h3 className="text-sm uppercase tracking-wider font-semibold text-foreground/50 mb-4">
               Réseaux Sociaux
             </h3>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5 pt-4">
               <a
-                href="#"
-                className="bg-foreground/5 p-4 rounded-full text-foreground/70 hover:bg-primary hover:text-background transition-colors"
+                href="https://www.instagram.com/fondationsylvainlumbalafsl?igsh=Y29jODJ0dnZvZjVk&utm_source=qr"
+                aria-label="Instagram"
+                className="bg-foreground/5 p-3 rounded-full hover:bg-primary hover:text-background transition-all"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Icon icon="solar:facebook-bold-duotone" className="text-2xl" />
+                <Icon icon="mdi:instagram" className="text-xl" />
               </a>
               <a
-                href="#"
-                className="bg-foreground/5 p-4 rounded-full text-foreground/70 hover:bg-primary hover:text-background transition-colors"
+                href="https://youtube.com/@fondationsylvainlumbala?si=vhRqZv8_AaaprFRv"
+                aria-label="Youtube"
+                className="bg-foreground/5 p-3 rounded-full hover:bg-primary hover:text-background transition-all"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Icon icon="solar:twitter-bold-duotone" className="text-2xl" />
-              </a>
-              <a
-                href="#"
-                className="bg-foreground/5 p-4 rounded-full text-foreground/70 hover:bg-primary hover:text-background transition-colors"
-              >
-                <Icon
-                  icon="solar:instagram-line-duotone"
-                  className="text-2xl"
-                />
-              </a>
-              <a
-                href="#"
-                className="bg-foreground/5 p-4 rounded-full text-foreground/70 hover:bg-primary hover:text-background transition-colors"
-              >
-                <Icon icon="solar:linkedin-bold-duotone" className="text-2xl" />
+                <Icon icon="mdi:youtube" className="text-xl" />
               </a>
             </div>
           </div>
