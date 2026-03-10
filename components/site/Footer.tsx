@@ -3,6 +3,7 @@
 import { Icon } from "@iconify/react";
 import fslLogo from "@/public/img/fsl-logo.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -30,44 +31,44 @@ const Footer = () => {
           </h4>
           <ul className="space-y-3 font-light">
             <li>
-              <a
+              <Link
                 href="/"
                 className="hover:text-secondary transition-colors inline-block w-fit"
               >
                 Accueil
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/a-propos"
                 className="hover:text-secondary transition-colors inline-block w-fit"
               >
                 A propos
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/nos-projets"
                 className="hover:text-secondary transition-colors inline-block w-fit"
               >
                 Nos projets
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/galerie"
                 className="hover:text-secondary transition-colors inline-block w-fit"
               >
                 Notre galerie
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 href="/contact"
                 className="hover:text-secondary transition-colors inline-block w-fit"
               >
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

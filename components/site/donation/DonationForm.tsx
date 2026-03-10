@@ -26,30 +26,6 @@ const DonationForm = () => {
   return (
     <section className="py-24 px-6 max-w-4xl mx-auto">
       <div className="bg-background rounded-[2.5rem] p-8 md:p-12 border shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)] border-foreground/10">
-        {/* Frequency Toggle */}
-        <div className="flex p-1 bg-foreground/5 rounded-2xl mb-10 w-full md:w-fit mx-auto">
-          <button
-            onClick={() => setFrequency("unique")}
-            className={`flex-1 md:px-8 py-3 rounded-xl font-medium text-sm transition-all ${
-              frequency === "unique"
-                ? "bg-background text-foreground shadow-sm"
-                : "text-foreground/60 hover:text-foreground"
-            }`}
-          >
-            Don Unique
-          </button>
-          <button
-            onClick={() => setFrequency("monthly")}
-            className={`flex-1 md:px-8 py-3 rounded-xl font-medium text-sm transition-all ${
-              frequency === "monthly"
-                ? "bg-background text-foreground shadow-sm"
-                : "text-foreground/60 hover:text-foreground"
-            }`}
-          >
-            Don Mensuel
-          </button>
-        </div>
-
         {/* Amount Selection */}
         <div className="mb-12">
           <h3 className="text-lg font-semibold text-foreground mb-4">
@@ -84,7 +60,7 @@ const DonationForm = () => {
                 onClick={() => setAmount("custom")}
                 className={`w-full h-full py-4 pl-8 pr-4 rounded-2xl font-bold text-lg bg-background border transition-all outline-none ${
                   amount === "custom"
-                    ? "border-primary text-foreground shadow-[0_0_0_2px_theme(colors.primary.DEFAULT/20)]"
+                    ? "border-primary text-foreground shadow-[0_0_0_2px_--theme(--color-primary/20)]"
                     : "border-foreground/10 text-foreground/70 focus:border-foreground/30"
                 }`}
               />
@@ -92,7 +68,7 @@ const DonationForm = () => {
           </div>
         </div>
 
-        <div className="w-full h-[1px] bg-foreground/5 mb-12"></div>
+        <div className="w-full h-px bg-foreground/5 mb-12"></div>
 
         {/* Personal Details */}
         <div className="space-y-6 mb-12">
@@ -146,7 +122,7 @@ const DonationForm = () => {
           </div>
         </div>
 
-        <div className="w-full h-[1px] bg-foreground/5 mb-12"></div>
+        <div className="w-full h-px bg-foreground/5 mb-12"></div>
 
         {/* Payment Method */}
         <div className="space-y-6">

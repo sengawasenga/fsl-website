@@ -63,7 +63,7 @@ const Mission = () => {
               key={idx}
               className="bg-background/10 backdrop-blur-sm p-8 rounded-[2rem] border border-background/20 flex flex-col sm:flex-row gap-6 hover:bg-background/20 transition-colors"
             >
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="bg-background text-primary w-14 h-14 rounded-2xl flex items-center justify-center">
                   <Icon icon={block.icon} className="text-3xl" />
                 </div>

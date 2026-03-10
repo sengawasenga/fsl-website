@@ -19,7 +19,7 @@ const DonationImpact = () => {
       amount: "100$",
     },
     {
-      icon: "solar:hands-drop-bold-duotone",
+      icon: "solar:hand-heart-bold-duotone",
       title: "Action Humanitaire",
       description:
         "Aidez-nous à intervenir rapidement lors de crises en apportant une aide alimentaire d'urgence et des produits de première nécessité.",
