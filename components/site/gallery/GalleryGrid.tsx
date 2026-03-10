@@ -14,11 +14,11 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
-const photos = Array.from({ length: 15 }).map((_, index) => {
+const photos = Array.from({ length: 17 }).map((_, index) => {
   // We use alternating aspect ratios to make the masonry layout look more dynamic
   const isPortrait = index % 3 === 0;
   return {
-    src: "/img/hero-bg.jpg",
+    src: `/img/members/img-${index + 1}.jpg`,
     width: isPortrait ? 1080 : 1920,
     height: isPortrait ? 1920 : 1080,
     alt: `Action sur le terrain - Image ${index + 1}`,
