@@ -1,20 +1,26 @@
 "use client";
 
 import { Icon } from "@iconify/react";
+import Image from "next/image";
 
 interface ProjectContentProps {
   content: string;
+  image: string;
+  title: string;
   stats: { label: string; value: string }[];
 }
 
-const ProjectContent = ({ content, stats }: ProjectContentProps) => {
+const ProjectContent = ({
+  content,
+  image,
+  title,
+  stats,
+}: ProjectContentProps) => {
   return (
     <section className="pb-24 px-6 max-w-4xl mx-auto">
       {/* Main image placeholder */}
-      <div className="bg-foreground/5 rounded-[2rem] w-full aspect-[21/9] shadow-sm flex items-center justify-center border border-foreground/10 mb-16 overflow-hidden">
-        <span className="text-foreground/30 font-medium tracking-widest uppercase text-sm">
-          Image Principale du Projet
-        </span>
+      <div className="bg-foreground/5 rounded-[2rem] w-full aspect-21/9 shadow-sm flex items-center justify-center border border-foreground/10 mb-16 overflow-hidden relative">
+        <Image src={image} alt={title} fill className="object-cover" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
@@ -31,7 +37,7 @@ const ProjectContent = ({ content, stats }: ProjectContentProps) => {
           <div className="mt-12 p-8 bg-foreground/5 rounded-2xl border-l-4 border-secondary flex gap-6 items-start">
             <Icon
               icon="solar:info-circle-bold-duotone"
-              className="text-4xl text-secondary flex-shrink-0"
+              className="text-4xl text-secondary shrink-0"
             />
             <p className="text-foreground/80 italic font-light">
               L'intégralité des fonds alloués à ce projet sont gérés directement
@@ -44,7 +50,7 @@ const ProjectContent = ({ content, stats }: ProjectContentProps) => {
         {/* Stats sidebar */}
         <div className="md:col-span-4">
           <div className="bg-primary text-background rounded-3xl p-8 sticky top-32 shadow-lg">
-            <h3 className="text-xl font-medium mb-8 text-background/90 tracking-wide uppercase text-sm">
+            <h3 className="text-xl font-medium mb-8 text-background/90 tracking-wide uppercase">
               Résultats clés
             </h3>
             <ul className="space-y-8">

@@ -24,6 +24,7 @@ export const PROJECTS_DATA = [
       { label: "Emplois locaux créés", value: "45" },
       { label: "Salles de classe", value: "6" },
     ],
+    image: "/img/members/img-1.jpg",
   },
   {
     id: "2",
@@ -41,6 +42,7 @@ export const PROJECTS_DATA = [
       { label: "Lits équipés", value: "25" },
       { label: "Soignants formés", value: "12" },
     ],
+    image: "/img/members/img-2.jpg",
   },
   {
     id: "3",
@@ -58,6 +60,7 @@ export const PROJECTS_DATA = [
       { label: "Croissance des revenus", value: "+40%" },
       { label: "Hectares cultivés", value: "15" },
     ],
+    image: "/img/members/img-3.jpg",
   },
   {
     id: "4",
@@ -75,6 +78,7 @@ export const PROJECTS_DATA = [
       { label: "Écoles partenaires", value: "5" },
       { label: "Baisse de l'absentéisme", value: "65%" },
     ],
+    image: "/img/members/img-4.jpg",
   },
   {
     id: "5",
@@ -92,6 +96,7 @@ export const PROJECTS_DATA = [
       { label: "Ambassadeurs formés", value: "50" },
       { label: "Quartiers pacifiés", value: "12" },
     ],
+    image: "/img/members/img-5.jpg",
   },
   {
     id: "6",
@@ -109,5 +114,6 @@ export const PROJECTS_DATA = [
       { label: "Maladies hydriques", value: "-80%" },
       { label: "Points d'eau créés", value: "3" },
     ],
+    image: "/img/members/img-6.jpg",
   },
 ];

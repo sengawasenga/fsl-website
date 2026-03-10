@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { CATEGORIES, PROJECTS_DATA } from "@/data/projects";
+import Image from "next/image";
 
 const ProjectsList = () => {
   const [activeCategory, setActiveCategory] = useState("Tous");
@@ -42,10 +43,13 @@ const ProjectsList = () => {
           >
             <div className="bg-background rounded-3xl border border-foreground/5 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 h-full flex flex-col">
               {/* Image Placeholder */}
-              <div className="bg-foreground/5 w-full aspect-[4/3] flex items-center justify-center relative overflow-hidden">
-                <span className="text-foreground/30 font-medium tracking-widest uppercase text-xs z-10">
-                  Image Projet
-                </span>
+              <div className="bg-foreground/5 w-full aspect-4/3 flex items-center justify-center relative overflow-hidden">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                />
                 <div className="absolute inset-0 bg-foreground/5 group-hover:scale-105 transition-transform duration-700"></div>
                 <div className="absolute top-4 left-4 z-10 bg-background/90 backdrop-blur-sm text-primary text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider">
                   {project.category}
@@ -61,10 +65,10 @@ const ProjectsList = () => {
                   />
                   <span>{project.date}</span>
                 </div>
-                <h3 className="text-2xl font-ashigea text-foreground mb-4 group-hover:text-primary transition-colors leading-tight">
+                <h3 className="text-2xl font-ashigea text-foreground mb-4 group-hover:text-primary transition-colors leading-tight line-clamp-2">
                   {project.title}
                 </h3>
-                <p className="text-foreground/70 font-light text-sm leading-relaxed mb-8 flex-1">
+                <p className="text-foreground/70 font-light text-sm leading-relaxed mb-8 flex-1 line-clamp-2">
                   {project.shortDescription}
                 </p>
 

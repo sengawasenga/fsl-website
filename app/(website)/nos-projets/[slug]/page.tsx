@@ -21,6 +21,18 @@ export async function generateMetadata({
   return {
     title: `${project.title} | Fondation Sylvain Lumbala`,
     description: project.shortDescription,
+    openGraph: {
+      title: `${project.title} | Fondation Sylvain Lumbala`,
+      description: project.shortDescription,
+      images: [
+        {
+          url: project.image,
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
+    },
   };
 }
 
@@ -56,9 +68,15 @@ export default async function ProjectDetailPage({
         category={project.category}
         date={project.date}
         location={project.location}
+        image={project.image}
       />
 
-      <ProjectContent content={project.content} stats={project.stats} />
+      <ProjectContent
+        content={project.content}
+        image={project.image}
+        title={project.title}
+        stats={project.stats}
+      />
 
       <RelatedProjects projects={relatedProjects} />
 

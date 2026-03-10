@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import SplitText from "@/components/ui/SplitText";
+import Image from "next/image";
 
 interface RelatedProject {
   id: string;
   slug: string;
   title: string;
+  image: string;
   category: string;
   date: string;
   shortDescription: string;
@@ -48,9 +50,12 @@ const RelatedProjects = ({ projects }: RelatedProjectsProps) => {
             >
               <div className="bg-background rounded-3xl border border-foreground/5 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 h-full flex flex-col">
                 <div className="bg-foreground/5 w-full aspect-video flex items-center justify-center relative overflow-hidden">
-                  <span className="text-foreground/30 font-medium tracking-widest uppercase text-xs z-10">
-                    Image Projet
-                  </span>
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                  />
                   <div className="absolute top-4 left-4 z-10 bg-background/90 backdrop-blur-sm text-primary text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-wider">
                     {project.category}
                   </div>
