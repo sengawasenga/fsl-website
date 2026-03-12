@@ -1,56 +1,70 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import Image from "next/image";
-
-// Mock data for initial photos
-const initialPhotos = [
-  { id: 1, url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop", category: "Santé" },
-  { id: 2, url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop", category: "Éducation" },
-  { id: 3, url: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?q=80&w=800&auto=format&fit=crop", category: "Agriculture" },
-  { id: 4, url: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=800&auto=format&fit=crop", category: "Social" },
-  { id: 5, url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop", category: "Environnement" },
-  { id: 6, url: "https://images.unsplash.com/photo-1524062794003-513a24734c6d?q=80&w=800&auto=format&fit=crop", category: "Santé" },
-];
+import { getGallery, uploadToGallery, deleteFromGallery } from "@/lib/actions/gallery";
 
 export const GalleryManager = () => {
-  const [photos, setPhotos] = useState(initialPhotos);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [photos, setPhotos] = useState<any[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const toggleSelect = (id: number) => {
+  const fetchPhotos = async () => {
+    setLoading(true);
+    const data = await getGallery();
+    setPhotos(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPhotos();
+  }, []);
+
+  const toggleSelect = (id: string) => {
     setSelectedIds(prev => 
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.length === photos.length) {
+    if (selectedIds.length === photos.length && photos.length > 0) {
       setSelectedIds([]);
     } else {
       setSelectedIds(photos.map(p => p.id));
     }
   };
 
-  const deletePhoto = (id: number) => {
-    setPhotos(prev => prev.filter(p => p.id !== id));
-    setSelectedIds(prev => prev.filter(i => i !== id));
+  const handleDeletePhoto = async (photo: any) => {
+    await deleteFromGallery(photo.id, photo.url);
+    fetchPhotos();
   };
 
-  const deleteSelected = () => {
-    setPhotos(prev => prev.filter(p => !selectedIds.includes(p.id)));
+  const deleteSelected = async () => {
+    const photosToDelete = photos.filter(p => selectedIds.includes(p.id));
+    for (const photo of photosToDelete) {
+      await deleteFromGallery(photo.id, photo.url);
+    }
     setSelectedIds([]);
+    fetchPhotos();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const newPhotos = Array.from(e.target.files).map((file, index) => ({
-        id: Date.now() + index,
-        url: URL.createObjectURL(file),
-        category: "Nouveau"
-      }));
-      setPhotos(prev => [...newPhotos, ...prev]);
+      setUploading(true);
+      const files = Array.from(e.target.files);
+      
+      for (const file of files) {
+        try {
+          await uploadToGallery(file, "Général"); // Default category for now
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+      
+      setUploading(false);
+      fetchPhotos();
     }
   };
 
@@ -89,10 +103,11 @@ export const GalleryManager = () => {
           />
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className="w-full md:w-auto bg-primary text-background px-6 py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap"
+            disabled={uploading}
+            className="w-full md:w-auto bg-primary text-background px-6 py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap disabled:opacity-50"
           >
-            <Icon icon="solar:camera-add-bold-duotone" className="text-2xl" />
-            Ajouter des photos
+            <Icon icon={uploading ? "solar:refresh-bold-duotone" : "solar:camera-add-bold-duotone"} className={`text-2xl ${uploading ? 'animate-spin' : ''}`} />
+            {uploading ? "Téléversement..." : "Ajouter des photos"}
           </button>
         </div>
       </div>
@@ -117,7 +132,7 @@ export const GalleryManager = () => {
                 }`}
               />
 
-              {/* Selection Checkbox (always visible if selected, visible on hover if not) */}
+              {/* Selection Checkbox */}
               <div 
                 className={`absolute top-4 left-4 z-20 cursor-pointer transition-opacity duration-300 ${
                   isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
@@ -131,11 +146,11 @@ export const GalleryManager = () => {
                 </div>
               </div>
 
-              {/* Delete Button (visible on hover) */}
+              {/* Delete Button */}
               <button 
                 onClick={(e) => {
                   e.stopPropagation();
-                  deletePhoto(photo.id);
+                  handleDeletePhoto(photo);
                 }}
                 className="absolute top-4 right-4 z-20 w-8 h-8 rounded-xl bg-red-500/80 hover:bg-red-500 text-white flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
               >
@@ -156,16 +171,17 @@ export const GalleryManager = () => {
         {/* Empty State / Add Placeholder */}
         <button 
           onClick={() => fileInputRef.current?.click()}
-          className="aspect-square rounded-[2rem] border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-4 text-foreground/30 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all group"
+          disabled={uploading}
+          className="aspect-square rounded-[2rem] border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-4 text-foreground/30 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all group disabled:opacity-50"
         >
           <div className="w-16 h-16 rounded-full bg-foreground/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/10 transition-all">
-            <Icon icon="solar:upload-minimalistic-bold-duotone" className="text-4xl" />
+            <Icon icon={uploading ? "solar:refresh-bold-duotone" : "solar:upload-minimalistic-bold-duotone"} className={`text-4xl ${uploading ? 'animate-spin' : ''}`} />
           </div>
-          <span className="font-semibold text-sm">Téléverser</span>
+          <span className="font-semibold text-sm">{uploading ? "Charing..." : "Téléverser"}</span>
         </button>
       </div>
 
-      {photos.length === 0 && (
+      {photos.length === 0 && !loading && (
         <div className="py-20 text-center space-y-4 bg-background rounded-[2.5rem] border border-foreground/5">
           <div className="w-20 h-20 bg-foreground/5 rounded-full flex items-center justify-center mx-auto">
             <Icon icon="solar:gallery-bold-duotone" className="text-4xl text-foreground/20" />
@@ -174,6 +190,13 @@ export const GalleryManager = () => {
           <p className="text-foreground/30 max-w-xs mx-auto text-sm">
             Commencez par ajouter quelques photos pour les afficher sur le site.
           </p>
+        </div>
+      )}
+
+      {loading && (
+        <div className="py-20 text-center flex flex-col items-center gap-4">
+          <Icon icon="solar:refresh-bold-duotone" className="text-5xl animate-spin text-primary/30" />
+          <span className="text-foreground/30 font-medium">Chargement de la galerie...</span>
         </div>
       )}
     </div>

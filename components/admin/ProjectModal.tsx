@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { CATEGORIES } from "@/data/projects";
 
@@ -11,9 +12,48 @@ interface ProjectModalProps {
 }
 
 export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalProps) => {
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "Éducation",
+    location: "",
+    date_string: "",
+    short_description: "",
+    content: "",
+    image_url: ""
+  });
+
+  useEffect(() => {
+    if (project) {
+      setFormData({
+        title: project.title || "",
+        category: project.category || "Éducation",
+        location: project.location || "",
+        date_string: project.date_string || "",
+        short_description: project.short_description || "",
+        content: project.content || "",
+        image_url: project.image_url || ""
+      });
+    } else {
+      setFormData({
+        title: "",
+        category: "Éducation",
+        location: "",
+        date_string: "",
+        short_description: "",
+        content: "",
+        image_url: ""
+      });
+    }
+  }, [project, isOpen]);
+
   if (!isOpen) return null;
 
   const isEdit = !!project;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(formData);
+  };
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
@@ -44,12 +84,7 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
 
         <form 
           className="p-8 max-h-[70vh] overflow-y-auto space-y-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            // In a real app, collect form data here
-            onSave({});
-            onClose();
-          }}
+          onSubmit={handleSubmit}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Title */}
@@ -57,7 +92,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
               <label className="text-sm font-medium text-foreground/70 px-2">Titre du Projet</label>
               <input 
                 type="text" 
-                defaultValue={project?.title}
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="w-full bg-foreground/5 rounded-2xl px-6 py-4 outline-none border border-transparent focus:border-primary transition-colors text-foreground"
                 placeholder="Ex: Construction d'une école..."
                 required
@@ -68,7 +104,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground/70 px-2">Catégorie</label>
               <select 
-                defaultValue={project?.category || "Éducation"}
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full bg-foreground/5 rounded-2xl px-6 py-4 outline-none border border-transparent focus:border-primary transition-colors text-foreground appearance-none cursor-pointer"
                 required
               >
@@ -83,7 +120,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
               <label className="text-sm font-medium text-foreground/70 px-2">Lieu</label>
               <input 
                 type="text" 
-                defaultValue={project?.location}
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 className="w-full bg-foreground/5 rounded-2xl px-6 py-4 outline-none border border-transparent focus:border-primary transition-colors text-foreground"
                 placeholder="Ex: Kinshasa, RDC"
                 required
@@ -95,7 +133,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
               <label className="text-sm font-medium text-foreground/70 px-2">Période</label>
               <input 
                 type="text" 
-                defaultValue={project?.date}
+                value={formData.date_string}
+                onChange={(e) => setFormData({ ...formData, date_string: e.target.value })}
                 className="w-full bg-foreground/5 rounded-2xl px-6 py-4 outline-none border border-transparent focus:border-primary transition-colors text-foreground"
                 placeholder="Ex: Janvier 2024 - Présent"
                 required
@@ -108,7 +147,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
             <label className="text-sm font-medium text-foreground/70 px-2">Brève Description</label>
             <textarea 
               rows={2}
-              defaultValue={project?.shortDescription}
+              value={formData.short_description}
+              onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
               className="w-full bg-foreground/5 rounded-2xl px-6 py-4 outline-none border border-transparent focus:border-primary transition-colors text-foreground resize-none"
               placeholder="Une courte phrase d'accroche..."
               required
@@ -120,7 +160,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
             <label className="text-sm font-medium text-foreground/70 px-2">Contenu Détailé</label>
             <textarea 
               rows={5}
-              defaultValue={project?.content}
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               className="w-full bg-foreground/5 rounded-2xl px-6 py-4 outline-none border border-transparent focus:border-primary transition-colors text-foreground resize-none"
               placeholder="Décrivez l'impact et les objectifs du projet..."
               required
@@ -131,9 +172,9 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground/70 px-2">Image du Projet</label>
             <div className="w-full aspect-16/6 rounded-[2rem] border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-2 hover:bg-foreground/5 cursor-pointer transition-all group">
-              {project?.image ? (
+              {formData.image_url ? (
                 <div className="relative w-full h-full p-4">
-                  <img src={project.image} alt="Preview" className="w-full h-full object-cover rounded-2xl" />
+                  <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover rounded-2xl" />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity">
                     <span className="text-white font-bold text-sm">Changer l'image</span>
                   </div>
@@ -157,7 +198,7 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
             Annuler
           </button>
           <button 
-            onClick={() => onSave({})}
+            onClick={handleSubmit}
             className="bg-primary text-background px-10 py-4 rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
             {isEdit ? "Enregistrer les modifications" : "Créer le projet"}

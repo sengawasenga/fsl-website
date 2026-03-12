@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { MasonryPhotoAlbum } from "react-photo-album";
 import "react-photo-album/masonry.css";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { getGallery } from "@/lib/actions/gallery";
 
 // import plugins
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
@@ -14,19 +15,27 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
-const photos = Array.from({ length: 17 }).map((_, index) => {
-  // We use alternating aspect ratios to make the masonry layout look more dynamic
-  const isPortrait = index % 3 === 0;
-  return {
-    src: `/img/members/img-${index + 1}.jpg`,
-    width: isPortrait ? 1080 : 1920,
-    height: isPortrait ? 1920 : 1080,
-    alt: `Action sur le terrain - Image ${index + 1}`,
-  };
-});
-
 const GalleryGrid = () => {
   const [index, setIndex] = useState(-1);
+  const [photos, setPhotos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const data = await getGallery();
+      // Transform Supabase data to gallery format
+      const formatted = data.map((p: any, i: number) => ({
+        src: p.url,
+        width: i % 3 === 0 ? 1080 : 1920, // Alternating for masonry look
+        height: i % 3 === 0 ? 1920 : 1080,
+        alt: `Action FSL - ${p.category || "Galerie"}`,
+        id: p.id,
+      }));
+      setPhotos(formatted);
+      setLoading(false);
+    };
+    fetch();
+  }, []);
 
   return (
     <section className="py-12 px-6 max-w-7xl mx-auto mb-24 min-h-[50vh]">

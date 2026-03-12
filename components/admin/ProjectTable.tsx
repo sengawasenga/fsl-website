@@ -1,22 +1,36 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { PROJECTS_DATA, CATEGORIES } from "@/data/projects";
+import { CATEGORIES } from "@/data/projects";
 import { ProjectModal } from "./ProjectModal";
 import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
+import { getProjects, createProject, updateProject, deleteProject as deleteProjectAction } from "@/lib/actions/projects";
 
 export const ProjectTable = () => {
+  const [projects, setProjects] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("Tous");
+  const [loading, setLoading] = useState(true);
   
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
 
+  const fetchProjects = async () => {
+    setLoading(true);
+    const data = await getProjects();
+    setProjects(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   const filteredProjects = useMemo(() => {
-    return PROJECTS_DATA.filter((project) => {
+    return projects.filter((project) => {
       const matchesSearch = 
         project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
         project.location.toLowerCase().includes(searchTerm.toLowerCase());
@@ -25,7 +39,7 @@ export const ProjectTable = () => {
 
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, categoryFilter]);
+  }, [projects, searchTerm, categoryFilter]);
 
   const handleEdit = (project: any) => {
     setSelectedProject(project);
@@ -42,14 +56,27 @@ export const ProjectTable = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    // In a real app, perform deletion here
-    setIsDeleteModalOpen(false);
+  const handleConfirmDelete = async () => {
+    if (selectedProject) {
+      await deleteProjectAction(selectedProject.id);
+      setIsDeleteModalOpen(false);
+      fetchProjects();
+    }
   };
 
-  const handleSaveProject = (data: any) => {
-    // In a real app, perform save here
+  const handleSaveProject = async (data: any) => {
+    // Basic slug generation if not provided
+    if (!data.slug) {
+      data.slug = data.title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
+    }
+    
+    if (selectedProject) {
+      await updateProject(selectedProject.id, data);
+    } else {
+      await createProject(data);
+    }
     setIsModalOpen(false);
+    fetchProjects();
   };
 
   return (
@@ -150,7 +177,14 @@ export const ProjectTable = () => {
               ) : (
                 <tr>
                   <td colSpan={5} className="px-6 py-20 text-center text-foreground/30 font-medium">
-                    Aucun projet trouvé pour vos critères de recherche.
+                    {loading ? (
+                      <div className="flex flex-col items-center gap-4">
+                        <Icon icon="solar:refresh-bold-duotone" className="text-4xl animate-spin" />
+                        Chargement des projets...
+                      </div>
+                    ) : (
+                      "Aucun projet trouvé pour vos critères de recherche."
+                    )}
                   </td>
                 </tr>
               )}

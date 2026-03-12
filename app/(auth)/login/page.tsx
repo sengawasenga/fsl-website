@@ -4,9 +4,45 @@ import { Icon } from "@iconify/react";
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 import logoFSL from "@/public/img/fsl-logo.png";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const supabase = createClient();
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        setError(signInError.message);
+        return;
+      }
+
+      router.push("/admin/home");
+      router.refresh();
+    } catch (err) {
+      setError("Une erreur inattendue est survenue.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center p-6 bg-background relative overflow-hidden">
       {/* Decorative background elements */}
@@ -36,7 +72,14 @@ const LoginPage = () => {
 
         {/* Login Form Card */}
         <div className="bg-foreground/5 rounded-[2.5rem] p-8 md:p-10 border border-foreground/5 backdrop-blur-sm shadow-xl shadow-black/5">
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={handleLogin}>
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-sm font-medium flex items-center gap-3">
+                <Icon icon="solar:danger-bold-duotone" className="text-xl shrink-0" />
+                {error === "Invalid login credentials" ? "Identifiants invalides." : error}
+              </div>
+            )}
+
             {/* Email Input */}
             <div className="space-y-2">
               <label
@@ -49,6 +92,8 @@ const LoginPage = () => {
                 <input
                   type="email"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-background rounded-2xl px-6 py-4 outline-none border border-foreground/10 focus:border-primary transition-all text-foreground"
                   placeholder="exemple@email.com"
                   required
@@ -76,6 +121,8 @@ const LoginPage = () => {
                 <input
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-background rounded-2xl px-6 py-4 outline-none border border-foreground/10 focus:border-primary transition-all text-foreground"
                   placeholder="••••••••"
                   required
@@ -102,9 +149,17 @@ const LoginPage = () => {
             <Button
               type="submit"
               size="lg"
-              className="bg-primary text-background w-full h-14 rounded-2xl text-lg mt-2 font-medium shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              isDisabled={loading}
+              className="bg-primary text-background w-full h-14 rounded-2xl text-lg mt-2 font-medium shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Se connecter
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <Icon icon="solar:refresh-bold-duotone" className="animate-spin text-2xl" />
+                  Connexion...
+                </div>
+              ) : (
+                "Se connecter"
+              )}
             </Button>
           </form>
         </div>
