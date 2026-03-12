@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -41,6 +42,17 @@ const menuItems = [
 
 export const AdminSidebar = () => {
   const pathname = usePathname();
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
+
+  useEffect(() => {
+    // Only fetch on mount and possibly poll? Simple fetch for now.
+    import("@/lib/actions/messages").then(({ getMessages }) => {
+      getMessages().then(data => {
+        const unread = data?.filter((m: any) => !m.is_read).length || 0;
+        setUnreadMessages(unread);
+      });
+    });
+  }, [pathname]); // Refresh when navigating to keep it pseudo-live
 
   return (
     <aside className="fixed left-0 top-0 h-full w-72 bg-background border-r border-foreground/5 flex flex-col z-50">
@@ -72,11 +84,11 @@ export const AdminSidebar = () => {
                 <span className="font-medium">{item.name}</span>
               </div>
               
-              {item.name === "Messages" && (
+              {item.name === "Messages" && unreadMessages > 0 && (
                 <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
                   isActive ? "bg-background text-primary" : "bg-primary text-background"
                 }`}>
-                  2
+                  {unreadMessages}
                 </span>
               )}
             </Link>
@@ -104,3 +116,4 @@ export const AdminSidebar = () => {
     </aside>
   );
 };
+

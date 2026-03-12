@@ -1,11 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { DonationTable } from "@/components/admin/DonationTable";
 import { StatCard } from "@/components/admin/StatCard";
+import { getDonationsStats } from "@/lib/actions/donations";
 
 const DonationsPage = () => {
+  const [stats, setStats] = useState({ totalDonations: 0, uniqueDonors: 0, successRate: 0 });
+
+  useEffect(() => {
+    getDonationsStats().then(setStats);
+  }, []);
+
   return (
     <div className="flex flex-col">
       <AdminHeader title="Gestion des Donations" />
@@ -15,23 +23,23 @@ const DonationsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatCard
             title="Collecte Totale"
-            value="12,450.00$"
+            value={`${stats.totalDonations}$`}
             icon="solar:wad-of-money-bold-duotone"
-            trend="+1250$ ce mois"
+            trend="+0$ ce mois"
             trendUp={true}
           />
           <StatCard
             title="Donateurs Uniques"
-            value="84"
+            value={stats.uniqueDonors.toString()}
             icon="solar:users-group-rounded-bold-duotone"
-            trend="+5 nouveaux"
+            trend="+0 nouveaux"
             trendUp={true}
           />
           <StatCard
             title="Taux de Réussite"
-            value="92%"
+            value={`${stats.successRate}%`}
             icon="solar:chart-bold-duotone"
-            trend="+2.4%"
+            trend="+0%"
             trendUp={true}
           />
         </div>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { CATEGORIES } from "@/data/projects";
+import { uploadFile } from "@/lib/actions/upload";
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
     content: "",
     image_url: ""
   });
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (project) {
@@ -53,6 +56,24 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+      const publicUrl = await uploadFile(uploadFormData);
+      setFormData({ ...formData, image_url: publicUrl });
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Erreur lors du téléversement de l'image.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -168,11 +189,26 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
             ></textarea>
           </div>
 
-          {/* Image Upload Placeholder */}
+          {/* Image Upload */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground/70 px-2">Image du Projet</label>
-            <div className="w-full aspect-16/6 rounded-[2rem] border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-2 hover:bg-foreground/5 cursor-pointer transition-all group">
-              {formData.image_url ? (
+            <input 
+              type="file" 
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+              accept="image/*"
+            />
+            <div 
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full aspect-16/6 rounded-[2rem] border-2 border-dashed border-foreground/10 flex flex-col items-center justify-center gap-2 hover:bg-foreground/5 cursor-pointer transition-all group overflow-hidden relative"
+            >
+              {isUploading ? (
+                <div className="flex flex-col items-center gap-2">
+                  <Icon icon="solar:refresh-bold-duotone" className="text-4xl text-primary animate-spin" />
+                  <span className="text-xs font-semibold text-foreground/30">Téléversement en cours...</span>
+                </div>
+              ) : formData.image_url ? (
                 <div className="relative w-full h-full p-4">
                   <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover rounded-2xl" />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity">
@@ -199,7 +235,8 @@ export const ProjectModal = ({ isOpen, onClose, project, onSave }: ProjectModalP
           </button>
           <button 
             onClick={handleSubmit}
-            className="bg-primary text-background px-10 py-4 rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            disabled={isUploading}
+            className="bg-primary text-background px-10 py-4 rounded-2xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isEdit ? "Enregistrer les modifications" : "Créer le projet"}
           </button>

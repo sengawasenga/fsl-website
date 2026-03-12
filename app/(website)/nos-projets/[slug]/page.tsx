@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PROJECTS_DATA } from "@/data/projects";
 import ProjectDetailHero from "@/components/site/projects/ProjectDetailHero";
 import ProjectContent from "@/components/site/projects/ProjectContent";
 import RelatedProjects from "@/components/site/projects/RelatedProjects";
 import CallToAction from "@/components/site/home/CallToAction";
+import { getProjectBySlug, getRelatedProjects } from "@/lib/actions/projects";
 
 export async function generateMetadata({
   params,
@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = PROJECTS_DATA.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return { title: "Projet introuvable" };
@@ -20,13 +20,13 @@ export async function generateMetadata({
 
   return {
     title: `${project.title} | Fondation Sylvain Lumbala`,
-    description: project.shortDescription,
+    description: project.short_description,
     openGraph: {
       title: `${project.title} | Fondation Sylvain Lumbala`,
-      description: project.shortDescription,
+      description: project.short_description,
       images: [
         {
-          url: project.image,
+          url: project.image_url,
           width: 1200,
           height: 630,
           alt: project.title,
@@ -42,43 +42,51 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = PROJECTS_DATA.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     notFound();
   }
 
-  // Get up to 3 related projects in the same category, excluding the current one
-  const relatedProjects = PROJECTS_DATA.filter(
-    (p) => p.category === project.category && p.id !== project.id,
-  ).slice(0, 3);
+  const relatedProjectsData = await getRelatedProjects(project.category, project.id);
 
-  // If not enough in the same category, fill with generic other projects
-  if (relatedProjects.length < 3) {
-    const additional = PROJECTS_DATA.filter(
-      (p) => p.category !== project.category && p.id !== project.id,
-    );
-    relatedProjects.push(...additional.slice(0, 3 - relatedProjects.length));
-  }
+  // Map database fields to what components expect
+  const mappedProject = {
+    ...project,
+    image: project.image_url,
+    date: project.date_string,
+    shortDescription: project.short_description,
+    stats: Array.isArray(project.stats) ? project.stats : []
+  };
+
+  const mappedRelatedProjects = relatedProjectsData.map(p => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    image: p.image_url,
+    category: p.category,
+    date: p.date_string,
+    shortDescription: p.short_description
+  }));
 
   return (
     <main>
       <ProjectDetailHero
-        title={project.title}
-        category={project.category}
-        date={project.date}
-        location={project.location}
-        image={project.image}
+        title={mappedProject.title}
+        category={mappedProject.category}
+        date={mappedProject.date}
+        location={mappedProject.location}
+        image={mappedProject.image}
       />
 
       <ProjectContent
-        content={project.content}
-        image={project.image}
-        title={project.title}
-        stats={project.stats}
+        content={mappedProject.content}
+        image={mappedProject.image}
+        title={mappedProject.title}
+        stats={mappedProject.stats}
       />
 
-      <RelatedProjects projects={relatedProjects} />
+      <RelatedProjects projects={mappedRelatedProjects} />
 
       <CallToAction />
     </main>

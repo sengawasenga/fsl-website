@@ -1,49 +1,13 @@
-"use client";
-
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { StatCard } from "@/components/admin/StatCard";
 import { Icon } from "@iconify/react";
+import { getDashboardStats, getMonthlyStats } from "@/lib/actions/dashboard";
+import DashboardChart from "@/components/admin/DashboardChart";
 
-const recentActivities = [
-  {
-    id: 1,
-    type: "donation",
-    title: "Don reçu",
-    description: "Jean Dupont a fait un don de 500$",
-    time: "Il y a 2 heures",
-    icon: "solar:heart-angle-bold-duotone",
-    color: "text-primary bg-primary/10",
-  },
-  {
-    id: 2,
-    type: "message",
-    title: "Nouveau message",
-    description: "Demande de partenariat de Marie Lopez",
-    time: "Il y a 5 heures",
-    icon: "solar:letter-bold-duotone",
-    color: "text-blue-500 bg-blue-500/10",
-  },
-  {
-    id: 3,
-    type: "project",
-    title: "Projet mis à jour",
-    description: "Réhabilitation de l'école de Kintambo",
-    time: "Hier",
-    icon: "solar:case-minimalistic-bold-duotone",
-    color: "text-amber-500 bg-amber-500/10",
-  },
-  {
-    id: 4,
-    type: "gallery",
-    title: "Nouvelles photos",
-    description: "12 photos ajoutées à l'album Santé",
-    time: "Il y a 2 jours",
-    icon: "solar:gallery-bold-duotone",
-    color: "text-emerald-500 bg-emerald-500/10",
-  },
-];
+const AdminHomePage = async () => {
+  const stats = await getDashboardStats();
+  const chartData = await getMonthlyStats();
 
-const AdminHomePage = () => {
   return (
     <div className="flex flex-col">
       <AdminHeader title="Tableau de Bord" />
@@ -53,26 +17,26 @@ const AdminHomePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Total Donations"
-            value="12,450$"
+            value={`${stats.totalDonations}$`}
             icon="solar:heart-angle-bold-duotone"
-            trend="+12%"
+            trend="+0%"
             trendUp={true}
           />
           <StatCard
             title="Messages Reçus"
-            value="48"
+            value={stats.messagesCount.toString()}
             icon="solar:letter-bold-duotone"
             trend="+5%"
             trendUp={true}
           />
           <StatCard
             title="Projets Actifs"
-            value="12"
+            value={stats.projectsCount.toString()}
             icon="solar:case-minimalistic-bold-duotone"
           />
           <StatCard
             title="Images Galerie"
-            value="856"
+            value={stats.galleryCount.toString()}
             icon="solar:gallery-bold-duotone"
             trend="+24"
             trendUp={true}
@@ -80,7 +44,7 @@ const AdminHomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main Chart Area Placeholder */}
+          {/* Main Chart Area */}
           <div className="lg:col-span-8 bg-background rounded-[2.5rem] p-8 border border-foreground/5 shadow-sm">
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -88,32 +52,13 @@ const AdminHomePage = () => {
                   Aperçu des Activités
                 </h3>
                 <p className="text-sm text-foreground/50 mt-1">
-                  Évolution des interactions sur les 30 derniers jours
+                  Évolution des interactions sur les 6 derniers mois
                 </p>
-              </div>
-              <div className="flex gap-2">
-                <button className="px-4 py-2 rounded-xl bg-foreground/5 text-sm font-medium hover:bg-foreground/10 transition-all">
-                  Semaine
-                </button>
-                <button className="px-4 py-2 rounded-xl bg-primary text-background text-sm font-medium shadow-lg shadow-primary/10">
-                  Mois
-                </button>
               </div>
             </div>
 
-            <div className="aspect-16/7 relative rounded-2xl overflow-hidden border border-foreground/5 bg-foreground/2 flex items-center justify-center">
-              <div className="absolute inset-0 flex items-center justify-around px-8 opacity-10">
-                {[...Array(12)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-px h-full bg-foreground"
-                    style={{ height: `${Math.random() * 100}%` }}
-                  />
-                ))}
-              </div>
-              <p className="text-foreground/30 font-medium z-10">
-                Espace réservé pour les graphiques
-              </p>
+            <div className="aspect-16/7 relative rounded-2xl border border-foreground/5 bg-background flex items-center justify-center pt-6 pr-6 pb-2 pl-2">
+              <DashboardChart data={chartData} />
             </div>
           </div>
 
@@ -130,26 +75,32 @@ const AdminHomePage = () => {
               </div>
 
               <div className="space-y-6">
-                {recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex gap-4 group">
-                    <div
-                      className={`w-12 h-12 rounded-2xl shrink-0 flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${activity.color}`}
-                    >
-                      <Icon icon={activity.icon} />
+                {stats.recentActivities.length > 0 ? (
+                  stats.recentActivities.map((activity) => (
+                    <div key={activity.id} className="flex gap-4 group">
+                      <div
+                        className={`w-12 h-12 rounded-2xl shrink-0 flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${activity.color}`}
+                      >
+                        <Icon icon={activity.icon} />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground leading-tight">
+                          {activity.title}
+                        </h4>
+                        <p className="text-sm text-foreground/60 mt-0.5 line-clamp-1">
+                          {activity.description}
+                        </p>
+                        <p className="text-xs text-foreground/40 mt-1 font-medium">
+                          {activity.time}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground leading-tight">
-                        {activity.title}
-                      </h4>
-                      <p className="text-sm text-foreground/60 mt-0.5 line-clamp-1">
-                        {activity.description}
-                      </p>
-                      <p className="text-xs text-foreground/40 mt-1 font-medium">
-                        {activity.time}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-sm text-foreground/50 text-center py-4">
+                    Aucune activité récente.
+                  </p>
+                )}
               </div>
 
               <div className="mt-10 p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
@@ -158,7 +109,8 @@ const AdminHomePage = () => {
                   Besoin d'aide ?
                 </h4>
                 <p className="text-xs text-foreground/70 leading-relaxed mb-4">
-                  Consultez le guide d'utilisation ou contactez le support technique.
+                  Consultez le guide d'utilisation ou contactez le support
+                  technique.
                 </p>
                 <button className="w-full py-2.5 rounded-xl bg-primary text-background text-xs font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
                   Guide d'utilisation

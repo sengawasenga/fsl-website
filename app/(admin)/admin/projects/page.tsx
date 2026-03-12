@@ -1,12 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { ProjectTable } from "@/components/admin/ProjectTable";
 import { StatCard } from "@/components/admin/StatCard";
-import { PROJECTS_DATA } from "@/data/projects";
+import { getProjects } from "@/lib/actions/projects";
 
 const AdminProjectsPage = () => {
-  const activeProjectsCount = PROJECTS_DATA.length;
+  const [activeProjectsCount, setActiveProjectsCount] = useState(0);
+  const [categoriesCount, setCategoriesCount] = useState(0);
+
+  useEffect(() => {
+    getProjects().then((data) => {
+      setActiveProjectsCount(data.length);
+      const uniqueCats = new Set(data.map((p) => p.category));
+      setCategoriesCount(uniqueCats.size);
+    });
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -21,15 +31,15 @@ const AdminProjectsPage = () => {
             icon="solar:case-minimalistic-bold-duotone"
           />
           <StatCard
-            title="Secteurs d'Intervention"
-            value="5"
+            title="Catégories couvertes"
+            value={categoriesCount}
             icon="solar:widget-add-bold-duotone"
           />
           <StatCard
             title="Impact Communautaire"
             value="15k+"
             icon="solar:users-group-rounded-bold-duotone"
-            trend="+1.2k"
+            trend="+0.0k"
             trendUp={true}
           />
         </div>

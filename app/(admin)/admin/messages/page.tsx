@@ -1,11 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { MessageTable } from "@/components/admin/MessageTable";
 import { StatCard } from "@/components/admin/StatCard";
 import { Icon } from "@iconify/react";
+import { getMessages } from "@/lib/actions/messages";
 
 const MessagesPage = () => {
+  const [messages, setMessages] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    getMessages().then((data) => {
+      setMessages(data);
+      const unread = data.filter((m: any) => !m.is_read).length;
+      setUnreadCount(unread);
+    });
+  }, []);
+
+  const readRate = messages.length > 0 
+    ? Math.round(((messages.length - unreadCount) / messages.length) * 100) 
+    : 0;
+
   return (
     <div className="flex flex-col">
       <AdminHeader title="Messages de Contact" />
@@ -15,22 +32,22 @@ const MessagesPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatCard
             title="Messages Reçus"
-            value="148"
+            value={messages.length.toString()}
             icon="solar:letter-bold-duotone"
-            trend="+12 aujourd'hui"
-            trendUp={true}
           />
           <StatCard
-            title="Sujet Principal"
-            value="Partenariat"
-            icon="solar:users-group-rounded-bold-duotone"
+            title="Messages Non-lus"
+            value={unreadCount.toString()}
+            icon="solar:bell-bing-bold-duotone"
+            trend={unreadCount > 0 ? "À traiter" : "Tout est lu"}
+            trendUp={unreadCount === 0}
           />
           <StatCard
-            title="Taux de Réponse"
-            value="85%"
+            title="Taux de Lecture"
+            value={`${readRate}%`}
             icon="solar:check-read-bold-duotone"
-            trend="+5%"
-            trendUp={true}
+            trend={readRate === 100 ? "Parfait" : "En attente"}
+            trendUp={readRate === 100}
           />
         </div>
 

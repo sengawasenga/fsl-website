@@ -1,61 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Icon } from "@iconify/react";
-
-const donations = [
-  {
-    id: "DON-001",
-    donor: "Jean Dupont",
-    email: "jean.dupont@email.com",
-    amount: "500.00$",
-    date: "12 Mars 2026",
-    status: "success",
-  },
-  {
-    id: "DON-002",
-    donor: "Marie Lopez",
-    email: "marie.l@domain.fr",
-    amount: "25.00$",
-    date: "11 Mars 2026",
-    status: "failed",
-  },
-  {
-    id: "DON-003",
-    donor: "Anonyme",
-    email: "n/a",
-    amount: "1,000.00$",
-    date: "10 Mars 2026",
-    status: "success",
-  },
-  {
-    id: "DON-004",
-    donor: "Marc Etoga",
-    email: "m.etoga@gmail.com",
-    amount: "150.00$",
-    date: "09 Mars 2026",
-    status: "pending",
-  },
-  {
-    id: "DON-005",
-    donor: "Sophie Davant",
-    email: "sophie.d@email.com",
-    amount: "200.00$",
-    date: "08 Mars 2026",
-    status: "success",
-  },
-  {
-    id: "DON-006",
-    donor: "Robert Fox",
-    email: "robert.fox@outlook.com",
-    amount: "45.00$",
-    date: "07 Mars 2026",
-    status: "success",
-  },
-];
+import { getDonations } from "@/lib/actions/donations";
 
 const statusMap = {
   success: { label: "Réussi", color: "bg-emerald-500" },
+  completed: { label: "Réussi", color: "bg-emerald-500" },
   failed: { label: "Échoué", color: "bg-red-500" },
   pending: { label: "En attente", color: "bg-amber-500" },
 };
@@ -63,18 +14,27 @@ const statusMap = {
 export const DonationTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [donations, setDonations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getDonations().then((data) => {
+      setDonations(data || []);
+      setLoading(false);
+    });
+  }, []);
 
   const filteredDonations = useMemo(() => {
     return donations.filter((donation) => {
       const matchesSearch = 
-        donation.donor.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        donation.id.toLowerCase().includes(searchTerm.toLowerCase());
+        (donation.donor_name || "").toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (donation.id || "").toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesStatus = statusFilter === "all" || donation.status === statusFilter;
 
       return matchesSearch && matchesStatus;
     });
-  }, [searchTerm, statusFilter]);
+  }, [donations, searchTerm, statusFilter]);
 
   return (
     <div className="space-y-6">
@@ -122,25 +82,42 @@ export const DonationTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-foreground/5">
-              {filteredDonations.length > 0 ? (
-                filteredDonations.map((donation) => (
-                  <tr key={donation.id} className="group hover:bg-foreground/5 transition-colors">
-                    <td className="px-6 py-5 text-sm font-bold text-foreground/40">{donation.id}</td>
-                    <td className="px-6 py-5">
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-foreground">{donation.donor}</span>
-                        <span className="text-xs text-foreground/50">{donation.email}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-5 text-right font-bold text-primary">{donation.amount}</td>
-                    <td className="px-6 py-5 text-sm text-foreground/70">{donation.date}</td>
-                    <td className="px-6 py-5">
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white ${statusMap[donation.status as keyof typeof statusMap].color}`}>
-                        {statusMap[donation.status as keyof typeof statusMap].label}
-                      </span>
-                    </td>
-                  </tr>
-                ))
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-20 text-center text-foreground/30 font-medium">
+                    <div className="flex flex-col items-center gap-4">
+                      <Icon icon="solar:refresh-bold-duotone" className="text-4xl animate-spin" />
+                      Chargement des donations...
+                    </div>
+                  </td>
+                </tr>
+              ) : filteredDonations.length > 0 ? (
+                filteredDonations.map((donation) => {
+                  const safeStatus = donation.status && statusMap[donation.status as keyof typeof statusMap] 
+                    ? donation.status as keyof typeof statusMap 
+                    : "pending";
+
+                  return (
+                    <tr key={donation.id} className="group hover:bg-foreground/5 transition-colors">
+                      <td className="px-6 py-5 text-sm font-bold text-foreground/40 max-w-[120px] truncate" title={donation.id}>{donation.id}</td>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-foreground">{donation.donor_name || "Anonyme"}</span>
+                          <span className="text-xs text-foreground/50">{donation.donor_email || "N/A"}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5 text-right font-bold text-primary">{donation.amount}$</td>
+                      <td className="px-6 py-5 text-sm text-foreground/70">
+                        {new Date(donation.created_at).toLocaleDateString("fr-FR")}
+                      </td>
+                      <td className="px-6 py-5">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white ${statusMap[safeStatus].color}`}>
+                          {statusMap[safeStatus].label}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })
               ) : (
                 <tr>
                   <td colSpan={5} className="px-6 py-20 text-center text-foreground/30 font-medium">

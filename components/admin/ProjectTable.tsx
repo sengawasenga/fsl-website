@@ -138,11 +138,11 @@ export const ProjectTable = () => {
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-foreground/5">
-                          <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                          <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
                         </div>
                         <div className="flex flex-col min-w-0">
                           <span className="font-semibold text-foreground truncate max-w-[250px]">{project.title}</span>
-                          <span className="text-xs text-foreground/50 truncate max-w-[250px]">{project.shortDescription}</span>
+                          <span className="text-xs text-foreground/50 truncate max-w-[250px]">{project.short_description}</span>
                         </div>
                       </div>
                     </td>
@@ -152,7 +152,7 @@ export const ProjectTable = () => {
                       </span>
                     </td>
                     <td className="px-6 py-5 text-sm text-foreground/70">{project.location}</td>
-                    <td className="px-6 py-5 text-sm text-foreground/70 whitespace-nowrap">{project.date}</td>
+                    <td className="px-6 py-5 text-sm text-foreground/70 whitespace-nowrap">{project.date_string}</td>
                     <td className="px-6 py-5 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button className="p-2 rounded-xl bg-foreground/5 text-foreground/50 hover:text-primary transition-colors">
